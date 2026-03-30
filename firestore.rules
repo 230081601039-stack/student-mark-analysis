@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * Firestore Security Rules
+     * 
+     * Core Philosophy:
+     * This ruleset implements a multi-tier authorization model supporting Students, Faculty, and Administrators. 
+     * Security is enforced through a combination of path-based ownership, functional roles (Admin/Faculty), 
+     * and denormalized identity fields (userId, studentUserId, facultyId) to ensure high performance and 
+     * Authorization Independence (eliminating unnecessary cross-document lookups).
+     * 
+     * Data Structure:
+     * - /users/{userId}: Root profiles for all users.
+     * - /roles_admin/{adminUid}: A marker collection for strictly verifying administrative privileges.
+     * - /students/{studentId}: Academic profiles, separated from basic user accounts.
+     * - /students/{studentId}/marks: Sub-collection for granular subject-level scoring.
+     * - /students/{studentId}/overallPerformance: Sub-collection for aggregated results.
+     * 
+     * Key Security Decisions:
+     * - Admin roles are verified via an existence check in the 'roles_admin' collection for maximum security.
+     * - Faculty access is determined by the 'role' field within the user's profile or specific 'facultyId' assignments.
+     * - Students are restricted to viewing only their own academic data by matching their Auth UID to denormalized 'studentUserId' fields.
+     * - Write operations (create, update, delete) are strictly guarded by ownership or administrative roles.
+     * 
+     * Denormalization for Authorization:
+     * To support efficient listing and secure access, student identifiers (studentUserId) and faculty identifiers (facultyId) 
+     * are stored directly on academic records. This allows rules to grant access based on 'resource.data' without 
+     * performing expensive 'get()' calls to parent documents.
+     */
+
+    // --- Helper Functions ---
+
+    /** @description Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user has an entry in the roles_admin collection. */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /** @description Checks if the authenticated user has a 'faculty' role in their user document. */
+    function isFaculty() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'faculty';
+    }
+
+    /** @description Checks if the UID matches the authenticated user. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Checks ownership for existing documents during update/delete. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    /** @description Checks if a specific field in the document data matches the authenticated user's UID. */
+    function isDataOwner(userIdField) {
+      return isSignedIn() && resource.data[userIdField] == request.auth.uid;
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Rules for the User collection, storing profile and role information.
+     * @path /users/{userId}
+     * @allow (get, update) if isOwner(userId). (CRUD) if isAdmin().
+     * @deny (update) if the userId in data is changed.
+     * @principle Path-based ownership for profile management; Admin override for management.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) || isAdmin();
+      allow update: if (isExistingOwner(userId) || isAdmin()) && (request.resource.data.id == resource.data.id);
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Rules for admin role verification. Presence of a document grants admin status.
+     * @path /roles_admin/{adminUid}
+     * @allow (get) if isSignedIn(). (CRUD) if isAdmin().
+     * @deny (create, update, delete) if the user is not an existing administrator.
+     * @principle Existence-based role assignment for high-integrity administrative access.
+     */
+    match /roles_admin/{adminUid} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    /**
+     * @description Rules for Student academic profiles.
+     * @path /students/{studentId}
+     * @allow (get) if resource.data.userId == auth.uid or isFaculty() or isAdmin().
+     * @deny (create, update, delete) if user is not an Admin.
+     * @principle Field-based ownership for students; role-based read access for faculty.
+     */
+    match /students/{studentId} {
+      allow get, list: if isDataOwner('userId') || isFaculty() || isAdmin();
+      allow create: if isAdmin() && (request.resource.data.id == studentId);
+      allow update: if isAdmin() && (request.resource.data.id == resource.data.id);
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Rules for individual subject marks.
+     * @path /students/{studentId}/marks/{markId}
+     * @allow (get) if studentUserId == auth.uid. (update) if facultyId == auth.uid. (CRUD) if isAdmin().
+     * @deny (update) if facultyId is modified.
+     * @principle Denormalized ownership for students and specific write access for assigned faculty.
+     */
+    match /students/{studentId}/marks/{markId} {
+      allow get, list: if isDataOwner('studentUserId') || isFaculty() || isAdmin();
+      allow create: if isAdmin() || (isFaculty() && request.resource.data.facultyId == request.auth.uid);
+      allow update: if isAdmin() || (isFaculty() && resource.data.facultyId == request.auth.uid && request.resource.data.facultyId == resource.data.facultyId);
+      allow delete: if isAdmin();
+    }
+
+    /**
+     * @description Rules for aggregated student performance summaries.
+     * @path /students/{studentId}/overallPerformance/{performanceId}
+     * @allow (get) if studentUserId == auth.uid or isFaculty() or isAdmin().
+     * @deny (create, update, delete) if user is not an Admin.
+     * @principle Restricts modification of calculated academic aggregates to administrators/system processes.
+     */
+    match /students/{studentId}/overallPerformance/{performanceId} {
+      allow get, list: if isDataOwner('studentUserId') || isFaculty() || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}

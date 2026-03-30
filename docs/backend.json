@@ -1,0 +1,284 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user within the system, including administrators, faculty, and students, with their basic profile information and role.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the user."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the user within the system (e.g., 'admin', 'faculty', 'student')."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user, used for login and identification.",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user account was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user account was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role",
+        "email"
+      ]
+    },
+    "Student": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Student",
+      "type": "object",
+      "description": "Represents a student enrolled in the institution, holding their academic and personal details.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Student entity."
+        },
+        "rollNumber": {
+          "type": "string",
+          "description": "The unique roll number assigned to the student."
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the student."
+        },
+        "class": {
+          "type": "string",
+          "description": "The academic class or grade level of the student (e.g., '10th Grade', 'B.Tech IV Year')."
+        },
+        "department": {
+          "type": "string",
+          "description": "The academic department the student belongs to (e.g., 'Computer Science', 'Electrical Engineering')."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the associated User entity for student login and profile management. (Relationship: User 1:1 Student)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the student record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the student record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "rollNumber",
+        "name",
+        "class",
+        "department",
+        "userId"
+      ]
+    },
+    "SubjectMark": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SubjectMark",
+      "type": "object",
+      "description": "Records an individual student's score for a specific subject.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the individual subject mark entry."
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Reference to the Student entity to whom this mark belongs. (Relationship: Student 1:N SubjectMark)"
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "The name of the academic subject (e.g., 'Mathematics', 'Physics', 'Data Structures')."
+        },
+        "score": {
+          "type": "number",
+          "description": "The numeric score obtained by the student in this subject, typically between 0 and 100."
+        },
+        "facultyId": {
+          "type": "string",
+          "description": "Reference to the User entity (with 'faculty' role) who entered or last updated this mark. (Relationship: User 1:N SubjectMark)"
+        },
+        "recordedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when this subject mark was last recorded or updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "studentId",
+        "subjectName",
+        "score",
+        "facultyId"
+      ]
+    },
+    "StudentOverallPerformance": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "StudentOverallPerformance",
+      "type": "object",
+      "description": "Aggregates and stores a student's calculated total marks, average score, overall grade, and pass/fail status for a specific academic period.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the student's overall performance summary for an academic period."
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Reference to the Student entity this performance summary belongs to. (Relationship: Student 1:N StudentOverallPerformance)"
+        },
+        "academicPeriod": {
+          "type": "string",
+          "description": "A description of the academic period this performance summary covers (e.g., 'Fall 2023', 'Semester 1', 'Final Year Annual')."
+        },
+        "totalMarks": {
+          "type": "number",
+          "description": "The sum of all subject scores for the student in this academic period."
+        },
+        "averageScore": {
+          "type": "number",
+          "description": "The average score across all subjects for the student in this academic period."
+        },
+        "grade": {
+          "type": "string",
+          "description": "The overall academic grade achieved by the student for this period (e.g., 'A', 'B', 'C', 'Fail')."
+        },
+        "passFailStatus": {
+          "type": "boolean",
+          "description": "Indicates whether the student passed (true) or failed (false) the academic period based on overall performance."
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when this overall performance summary was generated or last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "studentId",
+        "academicPeriod",
+        "totalMarks",
+        "averageScore",
+        "grade",
+        "passFailStatus"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores general user profiles, including their role (admin, faculty, student) and basic authentication details. The 'userId' in the path corresponds to the Firebase Auth UID. Authorization: Owners can read/update their own; Admins can CRUD all.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication User ID of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{adminUid}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "A top-level collection used for explicit declaration of administrative users. The existence of a document at `/roles_admin/{request.auth.uid}` grants administrative privileges. This provides a clear invariant for admin access in security rules. Documents are typically empty placeholders. Authorization: Only Admins can manage entries; anyone can check for existence.",
+          "params": [
+            {
+              "name": "adminUid",
+              "description": "The unique Firebase Authentication User ID of an administrator."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/students/{studentId}",
+        "definition": {
+          "entityName": "Student",
+          "schema": {
+            "$ref": "#/backend/entities/Student"
+          },
+          "description": "Stores detailed academic profiles for students. Includes `userId` (Firebase Auth UID) for authorization independence, allowing students to securely access their own profiles. Authorization: Students (matching `userId`) can read their own; Faculty can read; Admins can CRUD all.",
+          "params": [
+            {
+              "name": "studentId",
+              "description": "The unique identifier for the student's academic profile."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/students/{studentId}/marks/{markId}",
+        "definition": {
+          "entityName": "SubjectMark",
+          "schema": {
+            "$ref": "#/backend/entities/SubjectMark"
+          },
+          "description": "A subcollection holding individual subject marks for a specific student. Includes denormalized 'studentUserId', 'studentRollNumber', 'studentClass', 'studentDepartment' for authorization independence and QAPs. Also includes 'facultyId' for faculty write access. Authorization: Students (matching 'studentUserId') can read; Faculty (matching 'facultyId') can update; Admins can CRUD all.",
+          "params": [
+            {
+              "name": "studentId",
+              "description": "The unique identifier for the parent student."
+            },
+            {
+              "name": "markId",
+              "description": "The unique identifier for the individual subject mark entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/students/{studentId}/overallPerformance/{performanceId}",
+        "definition": {
+          "entityName": "StudentOverallPerformance",
+          "schema": {
+            "$ref": "#/backend/entities/StudentOverallPerformance"
+          },
+          "description": "A subcollection storing aggregated overall performance summaries for a specific student per academic period. Includes denormalized 'studentUserId', 'studentRollNumber', 'studentClass', 'studentDepartment' for authorization independence and QAPs. Authorization: Students (matching 'studentUserId') can read; Faculty can read; Admins can CRUD all.",
+          "params": [
+            {
+              "name": "studentId",
+              "description": "The unique identifier for the parent student."
+            },
+            {
+              "name": "performanceId",
+              "description": "The unique identifier for a student's overall performance summary for a specific academic period."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure is designed to adhere strictly to the CORE DESIGN PRINCIPLES and DESIGN STRATEGY MANDATES, prioritizing Authorization Independence, Structural Segregation, and clear Access Modeling. The structure leverages hierarchical paths for user-owned data and denormalizes authorization context to simplify security rules and enable efficient, secure list operations (QAPs).\n\n1.  **Authorization Independence (Mandate A):** To eliminate the need for `get()` calls in security rules, critical authorization context is denormalized directly into relevant documents. For instance:\n    *   Each `Student` document in `/students/{studentId}` includes a `userId` field, which stores the Firebase Authentication UID of the associated user. This allows a student to directly verify ownership of their `Student` profile: `request.auth.uid == resource.data.userId`.\n    *   `SubjectMark` documents (in `/students/{studentId}/marks/{markId}`) and `StudentOverallPerformance` documents (in `/students/{studentId}/overallPerformance/{performanceId}`) both include `studentUserId`, `studentRollNumber`, `studentClass`, and `studentDepartment` fields. This denormalization allows rules to evaluate student ownership (`request.auth.uid == resource.data.studentUserId`) and faculty-specific access (`resource.data.studentClass` or `resource.data.studentDepartment` for faculty roles) without needing to fetch parent `Student` documents or other `User` documents. The `facultyId` in `SubjectMark` also directly facilitates faculty-specific write access.\n\n2.  **Structural Segregation (Mandate B):** Data with different security requirements or lifecycle are segregated into distinct collections or subcollections:\n    *   `/users` for general user profiles and roles.\n    *   `/roles_admin` for strict, invariant admin role checks (existence-based).\n    *   `/students` for student-specific academic profiles.\n    *   `/students/{studentId}/marks` for individual subject scores, which have a specific faculty write access and student read access.\n    *   `/students/{studentId}/overallPerformance` for aggregated performance data, typically generated by backend processes and read by students/faculty/admins. This separation prevents mixing granular mark entry with calculated aggregates, each having different update patterns and authorization needs.\n\n3.  **Access Modeling (Mandate C):**\n    *   **Private Data:** User profiles are `/users/{userId}` (path-based ownership). Student academic data (profile, marks, performance) are secured by path (`/students/{studentId}/...`) and denormalized `studentUserId` fields, ensuring that `request.auth.uid` matches the owner's UID for read access.\n    *   **Hierarchical Paths:** `/students/{studentId}/marks/{markId}` and `/students/{studentId}/overallPerformance/{performanceId}` use a clear hierarchy for student-owned academic records.\n    *   **Global Roles (DBAC):** Admin roles are established using the `/roles_admin/{adminUid}` collection, where the presence of a document signifies admin status. Other roles (`faculty`, `student`) are stored in the `/users/{userId}` document's `role` field.\n\n4.  **QAPs (Queries are not Filters):** The denormalized fields (e.g., `studentUserId`, `studentClass`, `studentDepartment`, `facultyId`) directly in the `SubjectMark` and `StudentOverallPerformance` documents are crucial for supporting secure `list` operations. Security rules can efficiently filter and validate `read` requests based on these embedded fields without requiring expensive `get()` calls or relying on client-side filtering that could expose unauthorized data. For example, a student can query `/students/{studentId}/marks` and the rule can ensure `resource.data.studentUserId == request.auth.uid` before allowing the list operation, guaranteeing only their marks are returned."
+  }
+}
