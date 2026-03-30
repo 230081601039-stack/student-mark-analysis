@@ -1,0 +1,23 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Modern educational building background",
+      "imageUrl": "https://picsum.photos/seed/edu1/1200/800",
+      "imageHint": "university campus"
+    },
+    {
+      "id": "student-profile",
+      "description": "Student studying with laptop",
+      "imageUrl": "https://picsum.photos/seed/edu2/400/400",
+      "imageHint": "student studying"
+    },
+    {
+      "id": "faculty-avatar",
+      "description": "Professional teacher avatar",
+      "imageUrl": "https://picsum.photos/seed/edu3/100/100",
+      "imageHint": "teacher professional"
+    }
+  ]
+}
