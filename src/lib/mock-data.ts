@@ -1,4 +1,3 @@
-
 export type UserRole = 'admin' | 'faculty' | 'student';
 
 export interface User {
@@ -51,6 +50,30 @@ export const MOCK_STUDENTS: StudentRecord[] = [
       { subject: 'Economics', marks: 82 },
       { subject: 'Mathematics', marks: 70 },
       { subject: 'English', marks: 90 },
+    ]
+  },
+  {
+    rollNumber: 'S103',
+    name: 'Michael Brown',
+    className: '11th Grade',
+    department: 'Arts',
+    marks: [
+      { subject: 'History', marks: 88 },
+      { subject: 'Geography', marks: 75 },
+      { subject: 'Political Science', marks: 82 },
+      { subject: 'English', marks: 85 },
+    ]
+  },
+  {
+    rollNumber: 'S104',
+    name: 'Emily Davis',
+    className: 'B.Tech I Year',
+    department: 'Engineering',
+    marks: [
+      { subject: 'Programming in C', marks: 92 },
+      { subject: 'Engineering Physics', marks: 80 },
+      { subject: 'Calculus', marks: 85 },
+      { subject: 'Mechanics', marks: 78 },
     ]
   }
 ];
