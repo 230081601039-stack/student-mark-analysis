@@ -1,22 +1,17 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, BarChart3, ShieldCheck, Zap, Info } from 'lucide-react';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { GraduationCap, BarChart3, Zap } from 'lucide-react';
 
 export default function Home() {
-  const aboutImage = PlaceHolderImages.find(img => img.id === 'about-image');
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
-            < GraduationCap className="h-6 w-6 text-primary" />
+            <GraduationCap className="h-6 w-6 text-primary" />
             <span className="font-headline text-xl font-bold text-primary">EduMetric</span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">About</Link>
             <Button asChild variant="default">
               <Link href="/login">Get Started</Link>
             </Button>
@@ -53,52 +48,29 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="about" className="py-24 scroll-mt-16">
+        <section className="py-24 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                  <Info className="h-4 w-4" />
-                  <span>About Us</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Zap className="h-6 w-6" />
                 </div>
-                <h2 className="text-3xl font-bold font-headline">Redefining Academic Performance Analysis</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  EduMetric is built on the belief that data should empower, not overwhelm. We provide a bridge between complex academic records and meaningful educational outcomes.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                      <Zap className="h-3 w-3" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold">AI-Driven Diagnostics</h4>
-                      <p className="text-sm text-muted-foreground">Get instant summaries and study recommendations tailored to your unique profile.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 h-5 w-5 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                      <BarChart3 className="h-3 w-3" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold">Real-time Visualization</h4>
-                      <p className="text-sm text-muted-foreground">Transform static marks into dynamic charts that reveal growth patterns and potential.</p>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold">AI Diagnostics</h3>
+                <p className="text-muted-foreground text-sm">Tailored study recommendations based on your performance profile.</p>
               </div>
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-colors"></div>
-                <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-border/50 bg-muted">
-                  {aboutImage && (
-                    <Image 
-                      src={aboutImage.imageUrl} 
-                      alt={aboutImage.description}
-                      fill
-                      className="object-cover"
-                      data-ai-hint={aboutImage.imageHint}
-                    />
-                  )}
+              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
+                <div className="h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                  <BarChart3 className="h-6 w-6" />
                 </div>
+                <h3 className="text-xl font-bold">Visual Progress</h3>
+                <p className="text-muted-foreground text-sm">Dynamic charts that transform static marks into actionable insights.</p>
+              </div>
+              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <GraduationCap className="h-6 w-6" />
+                </div>
+                <h3 className="text-xl font-bold">Role-Based Portals</h3>
+                <p className="text-muted-foreground text-sm">Dedicated interfaces for Administrators, Faculty, and Students.</p>
               </div>
             </div>
           </div>
