@@ -18,6 +18,12 @@
       "description": "Professional teacher avatar",
       "imageUrl": "https://picsum.photos/seed/edu3/100/100",
       "imageHint": "teacher professional"
+    },
+    {
+      "id": "about-image",
+      "description": "Modern classroom or library setting",
+      "imageUrl": "https://picsum.photos/seed/edu4/800/600",
+      "imageHint": "modern library"
     }
   ]
 }

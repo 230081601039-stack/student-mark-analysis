@@ -1,9 +1,13 @@
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, BarChart3, ShieldCheck, Zap } from 'lucide-react';
+import { GraduationCap, BarChart3, ShieldCheck, Zap, Info } from 'lucide-react';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function Home() {
+  const aboutImage = PlaceHolderImages.find(img => img.id === 'about-image');
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -13,8 +17,8 @@ export default function Home() {
             <span className="font-headline text-xl font-bold text-primary">EduMetric</span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary">Features</Link>
-            <Link href="#about" className="text-sm font-medium hover:text-primary">About</Link>
+            <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">Features</Link>
+            <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">About</Link>
             <Button asChild variant="default">
               <Link href="/login">Get Started</Link>
             </Button>
@@ -54,7 +58,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="features" className="py-24 bg-card/50">
+        <section id="features" className="py-24 bg-card/50 scroll-mt-16">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold font-headline mb-4">Core Capabilities</h2>
@@ -88,6 +92,57 @@ export default function Home() {
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="py-24 scroll-mt-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                  <Info className="h-4 w-4" />
+                  <span>About Us</span>
+                </div>
+                <h2 className="text-3xl font-bold font-headline">Redefining Academic Performance Analysis</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  EduMetric is built on the belief that data should empower, not overwhelm. We provide a bridge between complex academic records and meaningful educational outcomes.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                      <Zap className="h-3 w-3" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold">AI-Driven Diagnostics</h4>
+                      <p className="text-sm text-muted-foreground">Get instant summaries and study recommendations tailored to your unique profile.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 h-5 w-5 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                      <BarChart3 className="h-3 w-3" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold">Real-time Visualization</h4>
+                      <p className="text-sm text-muted-foreground">Transform static marks into dynamic charts that reveal growth patterns and potential.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+                <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-border/50 bg-muted">
+                  {aboutImage && (
+                    <Image 
+                      src={aboutImage.imageUrl} 
+                      alt={aboutImage.description}
+                      fill
+                      className="object-cover"
+                      data-ai-hint={aboutImage.imageHint}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>
