@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -13,11 +12,10 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
-            <GraduationCap className="h-6 w-6 text-primary" />
+            < GraduationCap className="h-6 w-6 text-primary" />
             <span className="font-headline text-xl font-bold text-primary">EduMetric</span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">Features</Link>
             <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">About</Link>
             <Button asChild variant="default">
               <Link href="/login">Get Started</Link>
@@ -45,9 +43,6 @@ export default function Home() {
                 <Button size="lg" className="h-12 px-8" asChild>
                   <Link href="/login">Portal Login</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-8" asChild>
-                  <Link href="#features">Learn More</Link>
-                </Button>
               </div>
             </div>
           </div>
@@ -55,44 +50,6 @@ export default function Home() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-10">
             <div className="absolute top-20 left-1/4 w-72 h-72 bg-primary rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-accent rounded-full blur-3xl"></div>
-          </div>
-        </section>
-
-        <section id="features" className="py-24 bg-card/50 scroll-mt-16">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold font-headline mb-4">Core Capabilities</h2>
-              <p className="text-muted-foreground">Everything you need to manage academic records efficiently.</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: 'Secure Access',
-                  description: 'Role-based authentication for Admin, Faculty, and Students ensuring data integrity.',
-                  icon: ShieldCheck,
-                },
-                {
-                  title: 'Visual Analytics',
-                  description: 'Interactive charts and dashboards to visualize student performance trends.',
-                  icon: BarChart3,
-                },
-                {
-                  title: 'AI Insights',
-                  description: 'Automated performance summaries and recommendations using advanced GenAI.',
-                  icon: Zap,
-                }
-              ].map((feature, idx) => (
-                <div key={idx} className="group p-8 rounded-2xl border bg-background hover:shadow-xl transition-all duration-300">
-                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <feature.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-bold font-headline mb-3">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
