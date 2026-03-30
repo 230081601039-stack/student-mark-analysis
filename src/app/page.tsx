@@ -31,7 +31,7 @@ export default function Home() {
                 <span>Next-Gen Academic Analytics</span>
               </div>
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-foreground font-headline">
-                Empower Learning with <span className="text-primary">EduMetric Tracker</span>
+                Comprehensive <span className="text-primary">Student Mark Analysis</span>
               </h1>
               <p className="text-lg text-muted-foreground sm:text-xl max-w-2xl">
                 A comprehensive student mark analysis system designed for clarity, professionalism, and academic excellence. 
