@@ -49,12 +49,20 @@ export default function FacultyDashboard() {
             <CardTitle>Recent Student Records</CardTitle>
             <CardDescription>Manage and update academic performance data</CardDescription>
           </div>
-          <Button asChild>
-            <Link href="/faculty/marks">
-              <ClipboardList className="mr-2 h-4 w-4" />
-              Enter Marks
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/faculty/students/new">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Add Student
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/faculty/marks">
+                <ClipboardList className="mr-2 h-4 w-4" />
+                Enter Marks
+              </Link>
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
