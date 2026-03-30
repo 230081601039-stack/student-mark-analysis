@@ -84,11 +84,15 @@ export default function FacultyDashboard() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="ghost">
-                          <Eye className="h-4 w-4" />
+                        <Button size="sm" variant="ghost" asChild title="View Details">
+                          <Link href={`/faculty/marks/${student.rollNumber}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
                         </Button>
-                        <Button size="sm" variant="ghost">
-                          <Edit2 className="h-4 w-4 text-primary" />
+                        <Button size="sm" variant="ghost" asChild title="Edit Marks">
+                          <Link href={`/faculty/marks/${student.rollNumber}`}>
+                            <Edit2 className="h-4 w-4 text-primary" />
+                          </Link>
                         </Button>
                       </div>
                     </TableCell>
