@@ -1,25 +1,31 @@
 
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DashboardShell } from '@/components/layout/dashboard-shell';
 import { MOCK_STUDENTS } from '@/lib/mock-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Loader2, BookOpen, Target, BrainCircuit } from 'lucide-react';
+import { Sparkles, Loader2, BookOpen, Target, BrainCircuit, AlertCircle } from 'lucide-react';
 import { getPerformanceSummary, PerformanceSummaryOutput } from '@/ai/flows/ai-performance-summary';
 import { aiStudyAidQuestions, AiStudyAidQuestionsOutput } from '@/ai/flows/ai-study-aid-questions';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function StudentPerformance() {
   const student = MOCK_STUDENTS[0];
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<PerformanceSummaryOutput | null>(null);
   const [practice, setPractice] = useState<AiStudyAidQuestionsOutput | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const generateInsights = async () => {
     setLoading(true);
+    setError(null);
     try {
+      // 1. Get performance summary
       const summaryResult = await getPerformanceSummary({
         rollNumber: student.rollNumber,
         name: student.name,
@@ -27,14 +33,26 @@ export default function StudentPerformance() {
       });
       setSummary(summaryResult);
 
+      // 2. Generate study aid questions based on recommendations
       const practiceResult = await aiStudyAidQuestions({
         areasForImprovement: summaryResult.recommendations,
         numQuestions: 3,
         questionType: 'multiple_choice'
       });
       setPractice(practiceResult);
-    } catch (error) {
-      console.error("Failed to fetch insights", error);
+      
+      toast({
+        title: "Analysis Complete",
+        description: "Your personalized performance report and study aids are ready.",
+      });
+    } catch (err: any) {
+      const errorMessage = err.message || "Failed to fetch AI insights. Please try again later.";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Insight Generation Failed",
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }
@@ -60,6 +78,14 @@ export default function StudentPerformance() {
             </Button>
           </CardHeader>
         </Card>
+
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
         {summary && (
           <div className="grid gap-6 md:grid-cols-2">
