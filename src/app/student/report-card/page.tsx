@@ -1,16 +1,33 @@
+
 "use client"
 
+import { useState } from 'react';
 import { DashboardShell } from '@/components/layout/dashboard-shell';
 import { MOCK_STUDENTS, calculateStats } from '@/lib/mock-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Printer, Download, GraduationCap, Calendar, User } from 'lucide-react';
+import { Printer, Download, GraduationCap, Calendar, User, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function StudentReportCard() {
   const student = MOCK_STUDENTS[0]; // Defaulting to first mock student
   const stats = calculateStats(student.marks);
+  const { toast } = useToast();
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadPDF = () => {
+    setIsDownloading(true);
+    // Simulate PDF generation and download
+    setTimeout(() => {
+      setIsDownloading(false);
+      toast({
+        title: "Report Card Downloaded",
+        description: `Academic report for ${student.name} has been saved as PDF.`,
+      });
+    }, 1500);
+  };
 
   return (
     <DashboardShell userRole="student" userName={student.name}>
@@ -21,9 +38,18 @@ export default function StudentReportCard() {
             <p className="text-muted-foreground">Official record of your performance for the current semester.</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleDownloadPDF} 
+              disabled={isDownloading}
+            >
+              {isDownloading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              {isDownloading ? 'Generating...' : 'Download PDF'}
             </Button>
             <Button size="sm" onClick={() => window.print()}>
               <Printer className="mr-2 h-4 w-4" />
