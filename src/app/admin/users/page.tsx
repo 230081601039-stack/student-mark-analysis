@@ -15,6 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 export default function AdminUsers() {
   const { toast } = useToast();
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [isInviting, setIsInviting] = useState(false);
 
   const handleAction = (action: string, userName: string) => {
     setLoadingAction(`${action}-${userName}`);
@@ -28,10 +29,15 @@ export default function AdminUsers() {
   };
 
   const handleInvite = () => {
-    toast({
-      title: "Invitation Sent",
-      description: "A registration link has been sent to the new user's email.",
-    });
+    setIsInviting(true);
+    // Simulating API call
+    setTimeout(() => {
+      setIsInviting(false);
+      toast({
+        title: "Invitation Sent",
+        description: "A registration link has been sent to the new user's email.",
+      });
+    }, 1500);
   };
 
   return (
@@ -42,9 +48,22 @@ export default function AdminUsers() {
             <h2 className="text-3xl font-extrabold tracking-tight font-headline">User Management</h2>
             <p className="text-muted-foreground font-medium">Manage institutional accounts and system permissions.</p>
           </div>
-          <Button onClick={handleInvite} className="rounded-xl shadow-lg shadow-primary/20">
-            <UserPlus className="mr-2 h-4 w-4" />
-            Invite New User
+          <Button 
+            onClick={handleInvite} 
+            disabled={isInviting}
+            className="rounded-xl shadow-lg shadow-primary/20 min-w-[160px]"
+          >
+            {isInviting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Inviting...
+              </>
+            ) : (
+              <>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Invite New User
+              </>
+            )}
           </Button>
         </div>
 
