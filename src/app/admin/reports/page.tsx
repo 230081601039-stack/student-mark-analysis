@@ -4,10 +4,15 @@
 import { DashboardShell } from '@/components/layout/dashboard-shell';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Download, TrendingUp, Users, Calendar, ArrowRight } from 'lucide-react';
+import { FileText, Download, TrendingUp, Users, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 export default function AdminReports() {
+  const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const departmentPerformance = [
     { name: 'Science', avg: 84 },
     { name: 'Commerce', avg: 78 },
@@ -23,6 +28,31 @@ export default function AdminReports() {
     { title: 'Enrollment Audit 2024', date: 'April 30, 2024', type: 'Audit' },
   ];
 
+  const handleGenerateReport = () => {
+    setIsGenerating(true);
+    setTimeout(() => {
+      setIsGenerating(false);
+      toast({
+        title: "Report Generated",
+        description: "The new institutional performance report has been compiled successfully.",
+      });
+    }, 2000);
+  };
+
+  const handleDownload = (title: string) => {
+    toast({
+      title: "Downloading Report",
+      description: `${title} is being prepared for download.`,
+    });
+  };
+
+  const handleViewAllMetrics = () => {
+    toast({
+      title: "Opening Metrics Dashboard",
+      description: "Redirecting to the comprehensive institutional analytics suite.",
+    });
+  };
+
   return (
     <DashboardShell userRole="admin" userName="Dr. Admin">
       <div className="space-y-6">
@@ -31,9 +61,22 @@ export default function AdminReports() {
             <h2 className="text-3xl font-extrabold tracking-tight font-headline">Institutional Reports</h2>
             <p className="text-muted-foreground font-medium">Generate and review high-level academic analytics.</p>
           </div>
-          <Button className="rounded-xl shadow-lg shadow-primary/20">
-            <FileText className="mr-2 h-4 w-4" />
-            Generate New Report
+          <Button 
+            className="rounded-xl shadow-lg shadow-primary/20" 
+            onClick={handleGenerateReport}
+            disabled={isGenerating}
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <FileText className="mr-2 h-4 w-4" />
+                Generate New Report
+              </>
+            )}
           </Button>
         </div>
 
@@ -92,7 +135,11 @@ export default function AdminReports() {
               </div>
             </CardContent>
             <div className="p-6 pt-0 mt-auto">
-              <Button variant="outline" className="w-full rounded-xl font-bold group">
+              <Button 
+                variant="outline" 
+                className="w-full rounded-xl font-bold group"
+                onClick={handleViewAllMetrics}
+              >
                 View All Metrics
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -124,7 +171,12 @@ export default function AdminReports() {
                       </div>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="rounded-full">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="rounded-full"
+                    onClick={() => handleDownload(report.title)}
+                  >
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>
