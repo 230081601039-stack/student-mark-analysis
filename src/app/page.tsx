@@ -11,7 +11,7 @@ export default function Home() {
             <GraduationCap className="h-6 w-6 text-primary" />
             <span className="font-headline text-xl font-bold text-primary">EduMetric</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-6">
             <Button asChild variant="default">
               <Link href="/login">Get Started</Link>
             </Button>
@@ -60,26 +60,26 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Zap className="h-6 w-6" />
+              <div className="flex flex-col items-center space-y-4 p-8 bg-card rounded-2xl border shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-primary/20 cursor-default">
+                <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+                  <Zap className="h-7 w-7" />
                 </div>
                 <h3 className="text-xl font-bold">AI Diagnostics</h3>
-                <p className="text-muted-foreground text-sm">Tailored study recommendations based on your performance profile.</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">Tailored study recommendations based on your performance profile.</p>
               </div>
-              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                  <BarChart3 className="h-6 w-6" />
+              <div className="flex flex-col items-center space-y-4 p-8 bg-card rounded-2xl border shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-accent/20 cursor-default">
+                <div className="h-14 w-14 rounded-full bg-accent/10 flex items-center justify-center text-accent mb-2">
+                  <BarChart3 className="h-7 w-7" />
                 </div>
                 <h3 className="text-xl font-bold">Visual Progress</h3>
-                <p className="text-muted-foreground text-sm">Dynamic charts that transform static marks into actionable insights.</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">Dynamic charts that transform static marks into actionable insights.</p>
               </div>
-              <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <GraduationCap className="h-6 w-6" />
+              <div className="flex flex-col items-center space-y-4 p-8 bg-card rounded-2xl border shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-primary/20 cursor-default">
+                <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+                  <GraduationCap className="h-7 w-7" />
                 </div>
                 <h3 className="text-xl font-bold">Role-Based Portals</h3>
-                <p className="text-muted-foreground text-sm">Dedicated interfaces for Administrators, Faculty, and Students.</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">Dedicated interfaces for Administrators, Faculty, and Students.</p>
               </div>
             </div>
           </div>
