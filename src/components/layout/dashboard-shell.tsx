@@ -58,7 +58,7 @@ export function DashboardShell({ children, userRole, userName }: DashboardShellP
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
-        <Sidebar className="border-r border-border/40">
+        <Sidebar className="border-r border-border/40 print:hidden">
           <SidebarHeader className="p-4">
             <div className="flex items-center gap-2 px-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -105,9 +105,9 @@ export function DashboardShell({ children, userRole, userName }: DashboardShellP
             </div>
           </SidebarFooter>
         </Sidebar>
-        <main className="flex-1 overflow-auto bg-background p-6 md:p-10">
+        <main className="flex-1 overflow-auto bg-background p-6 md:p-10 print:p-0">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-8 flex items-center justify-between">
+            <div className="mb-8 flex items-center justify-between print:hidden">
               <div className="flex items-center gap-4">
                 <SidebarTrigger className="md:hidden" />
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">{menuItems.find(i => i.path === pathname)?.name || 'Dashboard'}</h1>
