@@ -10,9 +10,11 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MOCK_USERS } from '@/lib/mock-data';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [role, setRole] = useState<string>('student');
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -27,6 +29,13 @@ export default function LoginPage() {
       const user = MOCK_USERS.find(u => u.role === role) || MOCK_USERS[0];
       router.push(`/${user.role}/dashboard`);
     }, 1500);
+  };
+
+  const handleContactAdmin = () => {
+    toast({
+      title: "Support Request Initialized",
+      description: "Our administrative team has been notified. Please check your institutional email for a recovery link.",
+    });
   };
 
   return (
@@ -118,7 +127,11 @@ export default function LoginPage() {
               <p className="text-sm text-slate-500">
                 Having trouble accessing your account?
               </p>
-              <button type="button" className="text-xs font-bold text-primary hover:underline uppercase tracking-tight">
+              <button 
+                type="button" 
+                onClick={handleContactAdmin}
+                className="text-xs font-bold text-primary hover:underline uppercase tracking-tight"
+              >
                 Contact Administration
               </button>
             </div>
