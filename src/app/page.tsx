@@ -15,6 +15,9 @@ export default function Home() {
             <Button asChild variant="default">
               <Link href="/login">Get Started</Link>
             </Button>
+            <Link href="#about" className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
+              About
+            </Link>
           </nav>
         </div>
       </header>
@@ -48,8 +51,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-24 bg-muted/30">
+        <section id="about" className="py-24 bg-muted/30 scroll-mt-16">
           <div className="container mx-auto px-4 sm:px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">About EduMetric</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Empowering institutions with data-driven insights to foster academic growth and excellence through advanced tracking and AI-powered feedback.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div className="flex flex-col items-center space-y-4 p-6 bg-card rounded-xl border shadow-sm">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
