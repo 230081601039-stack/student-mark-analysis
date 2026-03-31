@@ -31,6 +31,13 @@ export default function AdminStudents() {
     });
   };
 
+  const handleBatchEnrollment = () => {
+    toast({
+      title: "Batch Enrollment Started",
+      description: "The system is ready to process bulk student data. Please upload your CSV file.",
+    });
+  };
+
   return (
     <DashboardShell userRole="admin" userName="Dr. Admin">
       <div className="space-y-6">
@@ -44,7 +51,7 @@ export default function AdminStudents() {
               <Download className="mr-2 h-4 w-4" />
               Export Records
             </Button>
-            <Button className="rounded-xl shadow-lg shadow-primary/20">
+            <Button onClick={handleBatchEnrollment} className="rounded-xl shadow-lg shadow-primary/20">
               <GraduationCap className="mr-2 h-4 w-4" />
               Batch Enrollment
             </Button>
