@@ -1,16 +1,39 @@
 
 "use client"
 
+import { useState } from 'react';
 import { DashboardShell } from '@/components/layout/dashboard-shell';
 import { MOCK_USERS } from '@/lib/mock-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { UserPlus, MoreHorizontal, ShieldCheck, Mail, ShieldAlert } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { UserPlus, MoreHorizontal, ShieldCheck, Mail, ShieldAlert, Loader2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function AdminUsers() {
+  const { toast } = useToast();
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+
+  const handleAction = (action: string, userName: string) => {
+    setLoadingAction(`${action}-${userName}`);
+    setTimeout(() => {
+      setLoadingAction(null);
+      toast({
+        title: "Action Successful",
+        description: `Successfully performed ${action} on user ${userName}.`,
+      });
+    }, 1000);
+  };
+
+  const handleInvite = () => {
+    toast({
+      title: "Invitation Sent",
+      description: "A registration link has been sent to the new user's email.",
+    });
+  };
+
   return (
     <DashboardShell userRole="admin" userName="Dr. Admin">
       <div className="space-y-6">
@@ -19,7 +42,7 @@ export default function AdminUsers() {
             <h2 className="text-3xl font-extrabold tracking-tight font-headline">User Management</h2>
             <p className="text-muted-foreground font-medium">Manage institutional accounts and system permissions.</p>
           </div>
-          <Button className="rounded-xl shadow-lg shadow-primary/20">
+          <Button onClick={handleInvite} className="rounded-xl shadow-lg shadow-primary/20">
             <UserPlus className="mr-2 h-4 w-4" />
             Invite New User
           </Button>
@@ -86,10 +109,16 @@ export default function AdminUsers() {
                         <DropdownMenuContent align="end" className="rounded-xl w-48">
                           <DropdownMenuLabel>Account Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="font-medium">Edit Profile</DropdownMenuItem>
-                          <DropdownMenuItem className="font-medium">Change Permissions</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleAction('editing', user.name)} className="font-medium cursor-pointer">
+                            Edit Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleAction('changing permissions', user.name)} className="font-medium cursor-pointer">
+                            Change Permissions
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive font-bold">Deactivate User</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleAction('deactivating', user.name)} className="text-destructive font-bold cursor-pointer">
+                            Deactivate User
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
