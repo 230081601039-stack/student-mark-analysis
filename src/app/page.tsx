@@ -39,7 +39,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" className="h-12 px-8" asChild>
-                  <Link href="/login">Portal Login</Link>
+                  <Link href="/login">Log In Now</Link>
                 </Button>
               </div>
             </div>
